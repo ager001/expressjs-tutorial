@@ -1,16 +1,21 @@
 import express, { Router } from 'express';
 import router from './routes.js';
+import multer from 'multer';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
-app.use(express.json());
+const upload = multer();
 
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+app.use(upload.single("image"))
 
 
 //Middleware
 
 app.use('/welcome',(req, res,next)=>{
-  console.log("Anew request received at" + Date.now());
+  console.log("A new request received at" + Date.now());
   next()
 })
 
@@ -45,6 +50,15 @@ app.put("/users/:id",(req, res)=>{
     })
   
 })
+
+app.post("/form", (req, res)=>{
+  console.log(req.body);
+  console.log(req.file);
+  
+  res.send('Form received successfully!')
+  
+})
+
 
 
 
